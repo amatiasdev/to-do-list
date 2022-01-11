@@ -1,35 +1,10 @@
-import React from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-const Container = () => {
-  const containers = [
-    {
-      id: 1,
-      name: "Parent",
-      className: "parent",
-    },
-    {
-      id: 2,
-      name: "To Do",
-      className: "to-do",
-    },
-    {
-      id: 3,
-      name: "Blocked",
-      className: "bloked",
-    },
-    {
-      id: 4,
-      name: "In Progress",
-      className: "in-progress",
-    },
-    {
-      id: 5,
-      name: "Done",
-      className: "done",
-    },
-  ];
+import React, {useState} from "react";
+import { DragDropContext} from "react-beautiful-dnd";
+import Column from "./Column";
 
-  const [list, setList] = React.useState([
+const Container = () => {
+
+  const [requirement, setRequirement] = useState([
     {
       id: "1",
       title: "TAREA 1",
@@ -58,65 +33,64 @@ const Container = () => {
     },
   ]);
 
-  const reorder = (list, startIndex, endIndex) => {
-      console.log(list);
-    const result = Array.from(list);
-    console.log(Array.from(result));
-    const [removed] = result.splice(startIndex, 1);
+  const [todo, setTodo] = useState([]);
 
-    console.log(Array.from(result));
-    console.log(removed);
+  const reorder = (requirement, startIndex, endIndex) => {
+    const result = Array.from(requirement);
+    const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
-    
-    console.log(Array.from(result));
     return result;
   };
 
-  const onDragEnd = (result) => {
+  const dragEndTodo = (result, source) => {
     console.log(result);
-    if (!result.destination) {
-        return;
+
+    let removed; 
+    switch (source) {
+      case 'todo':
+        [removed] = todo.splice(result.source.index, 1);
+        setRequirement(prevState=> [...prevState, removed]);
+        break;
+      case 'requirement':
+        [removed] = requirement.splice(result.source.index, 1);
+        setTodo(prevState=> [...prevState, removed]);
+        break;
+        default:
     }
     
 
-    const reorderItems = reorder(
-        list,
-        result.source.index,
-        result.destination.index
-      );
-  
+  }
 
-    setList(reorderItems);
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+        return;
+    }
+
+    switch (result.destination.droppableId) {
+        case "todo":
+          dragEndTodo(result, result.source.droppableId);
+        break;
+        case "requirement":
+          dragEndTodo(result, result.source.droppableId);
+        break;
+        default:
+          console.log("No droppableId");
+        break;
+    }
+
     
   };
 
   return (
-    <div>
+    <div >
       <h1>TO DO LIST</h1>
+      <div className="d-flex">
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {
-                list.map((item, index) => (
-                    <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                        <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        >
-                        {item.title}
-                        </div>
-                    )}
-                    </Draggable>
-                ))
-              }
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+        <Column data={requirement} droppableId="requirement"/>
+        <Column data={todo} droppableId="todo"/>
       </DragDropContext>
+
+      </div>
     </div>
   );
 };
