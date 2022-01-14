@@ -6,7 +6,6 @@ function Column({
     droppableId="requirement",
 }) {
 
-  console.log(data);
     return (
         <Droppable droppableId={droppableId}>
           {
