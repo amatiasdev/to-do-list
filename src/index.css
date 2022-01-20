@@ -19,4 +19,5 @@ code {
 .d-flex .column{
   flex: 1;
   border: 1px solid red;
+  height: 100vh;
 }
