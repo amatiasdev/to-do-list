@@ -102,9 +102,10 @@ const Container = () => {
     if (!result.destination) {
         return;
     }
+    /* console.log(result)
     console.log(result.source.droppableId);
-    console.log(crud[result.source.droppableId]);
-    const removed = crud[result.source.droppableId].remove(result);
+    console.log(crud[result.source.droppableId]); */
+    const removed = crud[result.source.droppableId].remove(result);//para acceder dinamicamente usa corchetes
     crud[result.destination.droppableId].add(removed);
   };
   
@@ -144,7 +145,7 @@ const Container = () => {
 
       <div className="d-flex">
       <DragDropContext onDragEnd={onDragEnd}>
-        <Column data={requirement} droppableId="requirement"/>
+        <Column data={requirement} droppableId="requirement" example={"prueba"}/>
         <Column data={todo} droppableId="todo"/>
         <Column data={blocked} droppableId="blocked"/>
         <Column data={inprogress} droppableId="inprogress"/>

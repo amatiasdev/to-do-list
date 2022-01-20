@@ -2,10 +2,15 @@ import React from 'react'
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 function Column({
-    data,
-    droppableId="requirement",
+    data=[],
+    droppableId="requirement", //asigna valor por default
+    ...props
 }) {
 
+  /* function Column(props){
+ */
+
+    console.log(props.example)
     return (
         <Droppable droppableId={droppableId}>
           {
