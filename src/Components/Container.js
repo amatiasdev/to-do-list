@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { DragDropContext} from "react-beautiful-dnd";
 import Column from "./Column";
+import Modal from "./Modal";
 
 const Container = () => {
 
@@ -23,10 +24,10 @@ const Container = () => {
       title: "TAREA 2",
       status: 0,
       type: 0,
-      description: "",
+      description: "TEST",
       assignedto: {
         userId: "",
-        name: "",
+        name: "Aldo",
         lastname: "",
       },
       parent: 0,
@@ -48,30 +49,32 @@ const Container = () => {
 
   const [todo, setTodo] = useState([]);
   const [blocked, setBlocked] = useState([]);
-  const [inprogress, setInprogress] = useState([])
+  const [inprogress, setInprogress] = useState([]);
+  const [elementSelect, setElementSelect] = useState(null);
 
-  const reorder = (requirement, startIndex, endIndex) => {
-    const result = Array.from(requirement);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
+  const reorder = (array, startIndex, element) => {
+    array.splice(startIndex, 0, element);
+    return array;
   };
-
 
   const crud = {
 
     requirement: {
-      add: (element) => {
-        setRequirement(prevState=> [...prevState, element]);
+      add: (element, result) => {
+        //requirement(requirement, element.source.index)
+        setRequirement(prevState=> reorder(prevState, result.destination.index, element));
       },
       remove: (element) => {
         const [removed] = requirement.splice(element.source.index, 1);
         return removed;
-      }
+      },
+      /* update: (element) => {
+
+      } */
     },
     todo: {
-      add: (element) => {
-        setTodo(prevState=> [...prevState, element]);
+      add: (element, result) => {
+        setTodo(prevState=> reorder(prevState, result.destination.index, element));
       },
       remove: (element) => {
         const [removed] = todo.splice(element.source.index, 1);
@@ -79,8 +82,8 @@ const Container = () => {
       }
     },
     blocked: {
-      add: (element) => {
-        setBlocked(prevState=> [...prevState, element]);
+      add: (element, result) => {
+        setBlocked(prevState=> reorder(prevState, result.destination.index, element));
       },
       remove: (element) => {
         const [removed] = blocked.splice(element.source.index, 1);
@@ -88,8 +91,8 @@ const Container = () => {
       }
     },
     inprogress: {
-      add: (element) => {
-        setInprogress(prevState=> [...prevState, element]);
+      add: (element, result) => {
+        setInprogress(prevState=> reorder(prevState, result.destination.index, element));
       },
       remove: (element) => {
         const [removed] = inprogress.splice(element.source.index, 1);
@@ -107,7 +110,7 @@ const Container = () => {
     console.log(result.source.droppableId);
     console.log(crud[result.source.droppableId]); */
     const removed = crud[result.source.droppableId].remove(result);//para acceder dinamicamente usa corchetes
-    crud[result.destination.droppableId].add(removed);
+    crud[result.destination.droppableId].add(removed, result);
   };
   
   const handleAddElement = (e) => {
@@ -146,12 +149,12 @@ const Container = () => {
 
       <div className="d-flex">
       <DragDropContext onDragEnd={onDragEnd}>
-        <Column data={requirement} droppableId="requirement" example={"prueba"}/>
-        <Column data={todo} droppableId="todo"/>
-        <Column data={blocked} droppableId="blocked"/>
-        <Column data={inprogress} droppableId="inprogress"/>
+        <Column data={requirement} droppableId="requirement" setElementSelect={setElementSelect}/>
+        <Column data={todo} droppableId="todo" setElementSelect={setElementSelect}/>
+        <Column data={blocked} droppableId="blocked" setElementSelect={setElementSelect}/>
+        <Column data={inprogress} droppableId="inprogress" setElementSelect={setElementSelect}/>
       </DragDropContext>
-
+      <Modal show={!!elementSelect} onHide={()=>setElementSelect(null)} element={elementSelect} crud={crud}/>  
       </div>
     </div>
   );

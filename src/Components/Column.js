@@ -3,15 +3,20 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 
 function Column({
     data=[],
-    droppableId="requirement", //asigna valor por default
-    ...props
+    droppableId="requirement", //asigna valor por default,
+    elementSelect,
+    setElementSelect
 }) {
 
   /* function Column(props){
  */
 
-    console.log(props.example)
+    
+
+
+
     return (
+      <>
         <Droppable droppableId={droppableId}>
           {
             (provided, snapshot) => (
@@ -24,6 +29,7 @@ function Column({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
+                          onClick={()=>setElementSelect(item)}
                         >
                         {item.title}
                         </div>
@@ -35,6 +41,7 @@ function Column({
             </div>
           )}
         </Droppable>
+      </>
     )
 }
 
