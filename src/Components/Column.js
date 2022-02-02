@@ -1,5 +1,6 @@
 import React from 'react'
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
+import Card from './Card';
 
 function Column({
     data=[],
@@ -7,13 +8,6 @@ function Column({
     elementSelect,
     setElementSelect
 }) {
-
-  /* function Column(props){
- */
-
-    
-
-
 
     return (
       <>
@@ -23,18 +17,7 @@ function Column({
             <div {...provided.droppableProps} ref={provided.innerRef} className='column'>
               {
                 data.map((item, index) => (
-                    <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          onClick={()=>setElementSelect(item)}
-                        >
-                        {item.title}
-                        </div>
-                    )}
-                    </Draggable>
+                  <Card key={item.id} item={item} index={index} provided={provided} setElementSelect={setElementSelect}/>   
                 ))
               }
               {provided.placeholder}

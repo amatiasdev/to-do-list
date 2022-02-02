@@ -18,21 +18,65 @@ code {
 }
 .d-flex .column{
   flex: 1;
-  border: 1px solid red;
+  border: 2px solid #201f1e;
   height: 100vh;
+  margin-top: 1rem;
 }
-.modalareainterest{
-  padding: 0px 12px 0px 12px!important;
+body{
+  background: #292827;
+  color: rgba(255, 255, 255, 0.95)
 }
-.modalareainterest .modal-body {
-  margin-left: 0px;
-  margin-right: 0px;
+.input-add{
+  align-self: stretch;
+  background: transparent;
+  overflow: hidden;
+  border: none;
+  flex-grow: 1;
+  outline: none;
+  padding: 2px 3px;
+  border: 1px solid #605e5c;
+  color: rgba(255, 255, 255, 0.95);
+  margin-right: 1rem;
 }
-.modalareainterest .modal-header {
-  background: #f1f3f7;
-  border-radius: 0.3rem 0.3rem 0rem 0rem;
-  -webkit-border-radius: 0.3rem 0.3rem 0rem 0rem;
-  -moz-border-radius: 0.3rem 0.3rem 0rem 0rem;
-
-  color: black;
+.btn-add:hover{
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(59, 58, 57, 1);
+}
+.btn-add{
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(225, 223, 221, 1);
+  position: relative; 
+  background-color: transparent;
+  border: none;
+  line-height: 40px;
+  min-width: 20px;
+  text-align: center;
+  padding: 0 6px;
+  height: 100%;
+  cursor: pointer;
+}
+.card{
+  background: #201f1e;
+  margin: 5px 5px 10px 5px;
+  border: 1px solid #605e5c;
+  border-left: 3px solid #f2cb1d; 
+  position: relative;
+  font-size: 9pt;
+  cursor: default;
+}
+.title-card{
+  position: relative;
+  margin: 4px 6px 6px 6px;
+  overflow: hidden;
+  line-height: 16px;
+  padding: 2px;
+  border: 1px solid transparent;
+}
+.title-icon{
+  display: inline-block;
+  margin-right: 5px;
+}
+.title{
+  display: inline;
 }
