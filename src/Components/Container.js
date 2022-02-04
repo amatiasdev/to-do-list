@@ -1,18 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
 import Modal from "./Modal";
 
 const Container = () => {
   const inputRef = useRef(null);
+  const inputDescRef = useRef(null);
   const [requirement, setRequirement] = useState([]);
   const [todo, setTodo] = useState([]);
   const [blocked, setBlocked] = useState([]);
   const [inprogress, setInprogress] = useState([]);
   const [elementSelect, setElementSelect] = useState(null);
 
+  useEffect(() => {
+    fetch("https://randomuser.me/api/", {method: "POST"})
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      }).catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const reorder = (array, startIndex, element) => {
-    /* array.splice(startIndex, 0, element); // does not work to update the state
+    /*  array.splice(startIndex, 0, element); // does not work to update the state
     return array; */
 
     const result = Array.from(array); // make a copy of the array important to update the state
@@ -25,8 +36,7 @@ const Container = () => {
       add: (element, result) => {
         setRequirement((prevState) => {
           const newArr = reorder(prevState, result.destination.index, element);
-          console.log(newArr);
-          return newArr;
+          /*  console.log(newArr) */ return newArr;
         });
       },
       remove: (element) => {
@@ -81,6 +91,8 @@ const Container = () => {
   const handleAddElement = (e) => {
     e.preventDefault();
     const value = inputRef.current.value;
+    console.log(inputDescRef);
+    const description = inputDescRef.current.value;
 
     if (!value) {
       return;
@@ -91,7 +103,7 @@ const Container = () => {
       title: value,
       status: "requirement",
       type: 0,
-      description: "",
+      description,
       assignedto: {
         userId: "",
         name: "",
@@ -105,8 +117,10 @@ const Container = () => {
       },
     });
     inputRef.current.value = "";
+    inputRef.current.focus();
+    inputDescRef.current.value = "";
   };
-
+  console.log(requirement);
   return (
     <div>
       <h1>TO DO LIST</h1>
@@ -114,7 +128,17 @@ const Container = () => {
         type="text"
         ref={inputRef}
         placeholder="Agregar nueva tarea"
-        id="add"
+        className="input-add"
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            handleAddElement(e);
+          }
+        }}
+      />
+      <input
+        type="text"
+        ref={inputDescRef}
+        placeholder="Describe la tarea please"
         className="input-add"
         onKeyPress={(e) => {
           if (e.key === "Enter") {

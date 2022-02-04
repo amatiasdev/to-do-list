@@ -8,7 +8,7 @@ function Column({
     elementSelect,
     setElementSelect
 }) {
-
+console.log(data)
     return (
       <>
         <Droppable droppableId={droppableId}>
