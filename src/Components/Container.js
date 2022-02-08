@@ -13,11 +13,12 @@ const Container = () => {
   const [elementSelect, setElementSelect] = useState(null);
 
   useEffect(() => {
-    fetch("https://randomuser.me/api/", {method: "POST"})
+    fetch("https://randomuser.me/api/", { method: "POST" })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
       });
   }, []);
@@ -123,63 +124,68 @@ const Container = () => {
   console.log(requirement);
   return (
     <div>
-      <h1>TO DO LIST</h1>
-      <input
-        type="text"
-        ref={inputRef}
-        placeholder="Agregar nueva tarea"
-        className="input-add"
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            handleAddElement(e);
-          }
-        }}
-      />
-      <input
-        type="text"
-        ref={inputDescRef}
-        placeholder="Describe la tarea please"
-        className="input-add"
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            handleAddElement(e);
-          }
-        }}
-      />
-      <button onClick={handleAddElement} className="btn-add">
-        <i className="fas fa-plus"></i>
-        <span>Agregar</span>
-      </button>
-
-      <div className="d-flex">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Column
-            data={requirement}
-            droppableId="requirement"
-            setElementSelect={setElementSelect}
-          />
-          <Column
-            data={todo}
-            droppableId="todo"
-            setElementSelect={setElementSelect}
-          />
-          <Column
-            data={blocked}
-            droppableId="blocked"
-            setElementSelect={setElementSelect}
-          />
-          <Column
-            data={inprogress}
-            droppableId="inprogress"
-            setElementSelect={setElementSelect}
-          />
-        </DragDropContext>
-        <Modal
-          show={!!elementSelect}
-          onHide={() => setElementSelect(null)}
-          element={elementSelect}
-          crud={crud}
+      <div className="container-cont">
+        <div className="title-big">
+          <h1>TO DO LIST</h1>
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <input
+          type="text"
+          ref={inputRef}
+          placeholder="Agregar nueva tarea"
+          className="input-add"
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleAddElement(e);
+            }
+          }}
         />
+        <input
+          type="text"
+          ref={inputDescRef}
+          placeholder="Describe la tarea please"
+          className="input-add"
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleAddElement(e);
+            }
+          }}
+        />
+        <button onClick={handleAddElement} className="btn-add">
+          <i className="fas fa-plus"></i>
+          <span>Agregar</span>
+        </button>
+
+        <div className="d-flex">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Column
+              data={requirement}
+              droppableId="requirement"
+              setElementSelect={setElementSelect}
+            />
+            <Column
+              data={todo}
+              droppableId="todo"
+              setElementSelect={setElementSelect}
+            />
+            <Column
+              data={blocked}
+              droppableId="blocked"
+              setElementSelect={setElementSelect}
+            />
+            <Column
+              data={inprogress}
+              droppableId="inprogress"
+              setElementSelect={setElementSelect}
+            />
+          </DragDropContext>
+          <Modal
+            show={!!elementSelect}
+            onHide={() => setElementSelect(null)}
+            element={elementSelect}
+            crud={crud}
+          />
+        </div>
       </div>
     </div>
   );
