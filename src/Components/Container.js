@@ -4,22 +4,24 @@ import Column from "./Column";
 import Modal from "./Modal";
 
 const Container = () => {
+  const API_URL = "http://localhost:5000/api/tasks";
   const inputRef = useRef(null);
   const inputDescRef = useRef(null);
-  const [requirement, setRequirement] = useState([]);
+  const [requirement, setRequirement] = useState(null);
   const [todo, setTodo] = useState([]);
   const [blocked, setBlocked] = useState([]);
   const [inprogress, setInprogress] = useState([]);
   const [elementSelect, setElementSelect] = useState(null);
 
   useEffect(() => {
-    fetch("https://randomuser.me/api/", { method: "POST" })
+    fetch(API_URL)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        const newData = data.map((item) => ({ ...item, id: item._id }));
+        setRequirement(newData);
       })
       .catch((error) => {
-        console.log(error);
+        setRequirement([]);
       });
   }, []);
 
@@ -100,29 +102,42 @@ const Container = () => {
     }
 
     const request = {
-      id: Math.floor(Math.random() * 100000000) + "",
       title: value,
       status: "requirement",
       type: 0,
       description,
-      assignedto: {
+      /* assignedto: {
         userId: "",
         name: "",
         lastname: "",
-      },
+      }, */
       parent: 0,
     };
-    crud.requirement.add(request, {
-      destination: {
-        index: requirement.length,
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    });
-    inputRef.current.value = "";
-    inputRef.current.focus();
-    inputDescRef.current.value = "";
+      body: JSON.stringify(request),
+    })
+      .then((response) => response.json())
+      .then((response2) => {
+        crud.requirement.add(
+          { ...response2, id: response2._id },
+          {
+            destination: {
+              index: requirement.length,
+            },
+          }
+        );
+        inputRef.current.value = "";
+        inputRef.current.focus();
+        inputDescRef.current.value = "";
+      });
   };
-  console.log(requirement);
-  return (
+
+  return Array.isArray(requirement) ? (
     <div>
       <div className="container-cont">
         <div className="title-big">
@@ -188,6 +203,8 @@ const Container = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <div>Loading</div>
   );
 };
 
