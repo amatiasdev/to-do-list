@@ -14,7 +14,7 @@ const Container = () => {
   const [elementSelect, setElementSelect] = useState(null);
 
   useEffect(() => {
-    fetch(API_URL)
+    fetch(API_URL) //SIMPLE FETCH, SIN PARAMENTRO ES IGUAL A GET
       .then((response) => response.json())
       .then((data) => {
         const newData = data.map((item) => ({ ...item, id: item._id }));
@@ -115,7 +115,7 @@ const Container = () => {
     };
 
     fetch(API_URL, {
-      method: "POST",
+      method: "POST", //AGREGA INFO A LA BASE DE DATOS
       headers: {
         "Content-Type": "application/json",
       },
@@ -194,12 +194,15 @@ const Container = () => {
               setElementSelect={setElementSelect}
             />
           </DragDropContext>
-          <Modal
+          {
+            elementSelect && <Modal
             show={!!elementSelect}
             onHide={() => setElementSelect(null)}
             element={elementSelect}
             crud={crud}
           />
+          }
+          
         </div>
       </div>
     </div>
